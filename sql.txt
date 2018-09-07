@@ -1,0 +1,2637 @@
+--
+-- PostgreSQL database dump
+--
+
+SET client_encoding = 'SQL_ASCII';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
+
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA public IS 'Standard public schema';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: a8xrecord; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE a8xrecord (
+    shift character varying(9) NOT NULL,
+    yymm character varying(7) DEFAULT ''::character varying,
+    product_id character varying(13) DEFAULT ''::character varying NOT NULL,
+    amt double precision DEFAULT 0,
+    reason character varying(155) DEFAULT ''::character varying,
+    ref_no1 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.a8xrecord OWNER TO sa;
+
+--
+-- Name: adj_price; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE adj_price (
+    effect_date character varying(10) NOT NULL,
+    effect_hour character varying(2) NOT NULL,
+    effect_min character varying(2) NOT NULL,
+    product_id character varying(13) NOT NULL,
+    price double precision,
+    mark character varying(1) DEFAULT ''::character varying,
+    exe_time character varying(20) DEFAULT ''::character varying,
+    ref_no1 character varying(20) DEFAULT ''::character varying,
+    ref_no2 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.adj_price OWNER TO sa;
+
+--
+-- Name: barcode_product; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE barcode_product (
+    barcode character varying(13) NOT NULL,
+    product_id character varying(13) DEFAULT ''::character varying,
+    active smallint DEFAULT 0
+);
+
+
+ALTER TABLE public.barcode_product OWNER TO sa;
+
+--
+-- Name: brs_tran; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE brs_tran (
+    station character varying(5) DEFAULT ''::character varying NOT NULL,
+    tran_date character varying(8) DEFAULT ''::character varying NOT NULL,
+    tran_shift character varying(1) DEFAULT ''::character varying NOT NULL,
+    tran_mode character varying(1) DEFAULT ''::character varying NOT NULL,
+    tran_seq character varying(2) DEFAULT ''::character varying NOT NULL,
+    save_date character varying(8) DEFAULT ''::character varying,
+    tran_amt character varying(8) DEFAULT 0
+);
+
+
+ALTER TABLE public.brs_tran OWNER TO sa;
+
+--
+-- Name: car_data; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE car_data (
+    car_no character varying(10) DEFAULT ''::character varying NOT NULL,
+    cust_id character varying(10) DEFAULT ''::character varying NOT NULL,
+    unit_id character varying(5) DEFAULT ''::character varying,
+    product_id character varying(13) DEFAULT ''::character varying,
+    status smallint DEFAULT 1
+);
+
+
+ALTER TABLE public.car_data OWNER TO sa;
+
+--
+-- Name: cd_data; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE cd_data (
+    cd_id character varying(3) NOT NULL,
+    cd_value character varying(30),
+    cd_ref character varying(3)
+);
+
+
+ALTER TABLE public.cd_data OWNER TO sa;
+
+--
+-- Name: credit_disc; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE credit_disc (
+    cust_id character varying(10) NOT NULL,
+    oil1_disc double precision DEFAULT 0,
+    oil1_free double precision DEFAULT 0,
+    oil2_disc double precision DEFAULT 0,
+    oil2_free double precision DEFAULT 0,
+    oil3_disc double precision DEFAULT 0,
+    oil3_free double precision DEFAULT 0
+);
+
+
+ALTER TABLE public.credit_disc OWNER TO sa;
+
+--
+-- Name: cust_unit; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE cust_unit (
+    cust_id character varying(10) DEFAULT ''::character varying NOT NULL,
+    unit_id character varying(5) DEFAULT ''::character varying NOT NULL,
+    unit_name character varying(30) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.cust_unit OWNER TO sa;
+
+--
+-- Name: customer; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE customer (
+    cust_id character varying(10) NOT NULL,
+    m_name character varying(50) DEFAULT ''::character varying,
+    s_name character varying(10) DEFAULT ''::character varying,
+    major_cls character varying(3) DEFAULT ''::character varying,
+    "owner" character varying(20) DEFAULT ''::character varying,
+    uid character varying(10) DEFAULT ''::character varying,
+    address character varying(60) DEFAULT ''::character varying,
+    tel character varying(20) DEFAULT ''::character varying,
+    fax character varying(20) DEFAULT ''::character varying,
+    chk_car character varying(1) DEFAULT ''::character varying,
+    prt_inv character varying(1) DEFAULT '0'::character varying,
+    status smallint DEFAULT 1
+);
+
+
+ALTER TABLE public.customer OWNER TO sa;
+
+--
+-- Name: daily_rpt; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE daily_rpt (
+    ord_id integer DEFAULT 0 NOT NULL,
+    shift character varying(9) DEFAULT ''::character varying NOT NULL,
+    title character varying(30) DEFAULT ''::character varying,
+    product_id character varying(13) DEFAULT ''::character varying,
+    name character varying(40) DEFAULT ''::character varying,
+    an_shift character varying(9) DEFAULT ''::character varying,
+    qty double precision,
+    stock double precision,
+    amt double precision
+);
+
+
+ALTER TABLE public.daily_rpt OWNER TO sa;
+
+--
+-- Name: dcard_mbr; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE dcard_mbr (
+    dcard_no character varying(15) NOT NULL,
+    car_no character varying(10) NOT NULL,
+    cust_id character varying(9) DEFAULT ''::character varying,
+    cust_name character varying(40) DEFAULT ''::character varying,
+    pid character varying(10) DEFAULT ''::character varying,
+    udate timestamp with time zone,
+    status character(1) DEFAULT '1'::bpchar,
+    memo1 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.dcard_mbr OWNER TO sa;
+
+--
+-- Name: ebcs_cardsales; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE ebcs_cardsales (
+    ws_call character varying(20) NOT NULL,
+    setl_date character varying(8) NOT NULL,
+    bcs_merch_id character varying(5) NOT NULL,
+    shift_island character varying(10) NOT NULL,
+    seq_batchno character varying(10) NOT NULL,
+    user_barcode character varying(10) DEFAULT ''::character varying,
+    creditcard double precision DEFAULT 0,
+    creditcardredeem double precision DEFAULT 0,
+    fleetcard double precision DEFAULT 0,
+    svccardaward double precision DEFAULT 0,
+    svccardredeem double precision DEFAULT 0,
+    host_ttl_cnt double precision DEFAULT 0,
+    host_ttl_amt double precision DEFAULT 0,
+    host_redeem_amt double precision DEFAULT 0,
+    host_award_points double precision DEFAULT 0,
+    host_redeem_points double precision DEFAULT 0,
+    host_ci_ttl_cnt double precision DEFAULT 0,
+    host_ci_ttl_amt double precision DEFAULT 0,
+    host_ci_redeem_amt double precision DEFAULT 0,
+    host_ci_award_points double precision DEFAULT 0,
+    host_ci_redeem_points double precision DEFAULT 0,
+    host_cb_ttl_cnt double precision DEFAULT 0,
+    host_cb_ttl_amt double precision DEFAULT 0,
+    host_cb_redeem_amt double precision DEFAULT 0,
+    host_cb_award_points double precision DEFAULT 0,
+    host_cb_redeem_points double precision DEFAULT 0,
+    rcode character varying(4) DEFAULT ''::character varying,
+    creditcard_m double precision DEFAULT 0,
+    creditcardredeem_m double precision DEFAULT 0,
+    fleetcard_m double precision DEFAULT 0,
+    svccardaward_m double precision DEFAULT 0,
+    svccardredeem_m double precision DEFAULT 0
+);
+
+
+ALTER TABLE public.ebcs_cardsales OWNER TO sa;
+
+--
+-- Name: edc_tran; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE edc_tran (
+    edctran_no character varying(20) NOT NULL,
+    island character(2) DEFAULT ''::bpchar,
+    gun_no character(2) DEFAULT ''::bpchar,
+    tran_time timestamp with time zone,
+    payment character varying(4) DEFAULT ''::character varying,
+    cardno character varying(30) DEFAULT ''::character varying,
+    card_traceno character varying(12) DEFAULT ''::character varying,
+    app_code character varying(6) DEFAULT ''::character varying,
+    edc_invoiceno character varying(6) DEFAULT ''::character varying,
+    edc_no character varying(8) DEFAULT ''::character varying,
+    batchno character varying(6) DEFAULT ''::character varying,
+    tran_seq character varying(6) DEFAULT ''::character varying,
+    edc_tran_time timestamp with time zone,
+    reply_code character(4) DEFAULT ''::bpchar,
+    amount double precision DEFAULT 0,
+    shift character varying(9) DEFAULT ''::character varying,
+    memo1 character varying(20) DEFAULT ''::character varying,
+    memo2 character varying(20) DEFAULT ''::character varying,
+    memo3 character varying(20) DEFAULT ''::character varying,
+    memo4 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.edc_tran OWNER TO sa;
+
+--
+-- Name: edc_tran_tmp; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE edc_tran_tmp (
+    edctran_no character varying(20) NOT NULL,
+    island character(2) DEFAULT ''::bpchar,
+    gun_no character(2) DEFAULT ''::bpchar,
+    tran_time timestamp with time zone,
+    payment character varying(4) DEFAULT ''::character varying,
+    cardno character varying(30) DEFAULT ''::character varying,
+    card_traceno character varying(12) DEFAULT ''::character varying,
+    app_code character varying(6) DEFAULT ''::character varying,
+    edc_invoiceno character varying(6) DEFAULT ''::character varying,
+    edc_no character varying(8) DEFAULT ''::character varying,
+    batchno character varying(6) DEFAULT ''::character varying,
+    tran_seq character varying(6) DEFAULT ''::character varying,
+    edc_tran_time timestamp with time zone,
+    reply_code character(4) DEFAULT ''::bpchar,
+    amount double precision DEFAULT 0,
+    shift character varying(9) DEFAULT ''::character varying,
+    memo1 character varying(20) DEFAULT ''::character varying,
+    memo2 character varying(20) DEFAULT ''::character varying,
+    memo3 character varying(20) DEFAULT ''::character varying,
+    memo4 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.edc_tran_tmp OWNER TO sa;
+
+--
+-- Name: employee; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE employee (
+    emp_id character varying(10) NOT NULL,
+    name character varying(12) DEFAULT ''::character varying,
+    birthday date,
+    sex character varying(2) DEFAULT ''::character varying,
+    blood character varying(2) DEFAULT ''::character varying,
+    uid character varying(10) DEFAULT ''::character varying,
+    pos_id character varying(3) DEFAULT ''::character varying,
+    edu_id character varying(3) DEFAULT ''::character varying,
+    hire_date date,
+    leave_date date,
+    address1 character varying(50) DEFAULT ''::character varying,
+    address2 character varying(50) DEFAULT ''::character varying,
+    tel1 character varying(20) DEFAULT ''::character varying,
+    tel2 character varying(20) DEFAULT ''::character varying,
+    fax1 character varying(20) DEFAULT ''::character varying,
+    status smallint DEFAULT 0,
+    memo1 character varying(20) DEFAULT ''::character varying,
+    memo2 character varying(20) DEFAULT ''::character varying,
+    memo3 character varying(20) DEFAULT ''::character varying,
+    memo4 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.employee OWNER TO sa;
+
+--
+-- Name: extra_unit; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE extra_unit (
+    barcode1 character varying(30) NOT NULL,
+    barcode2 character varying(30) NOT NULL,
+    switch_qty double precision,
+    memo character varying(50) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.extra_unit OWNER TO sa;
+
+--
+-- Name: flow_rate; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE flow_rate (
+    date1 character varying(5) NOT NULL,
+    source_id character varying(5) NOT NULL,
+    port_no character varying(2) NOT NULL,
+    qty double precision DEFAULT 0
+);
+
+
+ALTER TABLE public.flow_rate OWNER TO sa;
+
+--
+-- Name: free_stock; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE free_stock (
+    product_id character varying(13) NOT NULL,
+    range1 integer DEFAULT 0,
+    range2 integer DEFAULT 0,
+    mark1 character varying(1) DEFAULT '0'::character varying,
+    mark2 character varying(5) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.free_stock OWNER TO sa;
+
+--
+-- Name: function_tree; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE function_tree (
+    func_id character varying(3) DEFAULT ''::character varying NOT NULL,
+    root_name character varying(1) DEFAULT ''::character varying,
+    root_fg smallint DEFAULT 0,
+    func_name character varying(20) DEFAULT ''::character varying,
+    auth_name0 character varying(20) DEFAULT ''::character varying,
+    auth_name1 character varying(20) DEFAULT ''::character varying,
+    auth_name2 character varying(20) DEFAULT ''::character varying,
+    auth_name3 character varying(20) DEFAULT ''::character varying,
+    auth_name4 character varying(20) DEFAULT ''::character varying,
+    auth_name5 character varying(20) DEFAULT ''::character varying,
+    auth_name6 character varying(20) DEFAULT ''::character varying,
+    auth_name7 character varying(20) DEFAULT ''::character varying,
+    auth_name8 character varying(20) DEFAULT ''::character varying,
+    auth_name9 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.function_tree OWNER TO sa;
+
+--
+-- Name: gun_total; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE gun_total (
+    island character(2) DEFAULT '00'::bpchar NOT NULL,
+    gun_no character(2) DEFAULT '00'::bpchar NOT NULL,
+    shift character varying(9) DEFAULT ''::character varying NOT NULL,
+    amt_num double precision DEFAULT 0,
+    vol_num double precision DEFAULT 0,
+    gear_num double precision DEFAULT 0,
+    gear_mark character varying(1) DEFAULT ''::character varying,
+    ref1 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.gun_total OWNER TO sa;
+
+--
+-- Name: ig_ecr; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE ig_ecr (
+    island character(2) DEFAULT '00'::bpchar NOT NULL,
+    gun_no character(2) DEFAULT '00'::bpchar NOT NULL,
+    ecr_no2 character varying(6) DEFAULT 'XXXXXX'::character varying NOT NULL,
+    ecr_no3 character varying(6) DEFAULT 'XXXXXX'::character varying NOT NULL
+);
+
+
+ALTER TABLE public.ig_ecr OWNER TO sa;
+
+--
+-- Name: increase; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE increase (
+    eff_date timestamp with time zone NOT NULL,
+    product_id character varying(13) DEFAULT ''::character varying NOT NULL,
+    unit character varying(4) DEFAULT ''::character varying,
+    price double precision DEFAULT 0,
+    status smallint DEFAULT 0
+);
+
+
+ALTER TABLE public.increase OWNER TO sa;
+
+--
+-- Name: inv_declare; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE inv_declare (
+    serialno integer NOT NULL,
+    yymm character varying(7) NOT NULL,
+    rcpt_type character varying(2),
+    numberstart character varying(10),
+    numberend character varying(10),
+    memo character varying(10)
+);
+
+
+ALTER TABLE public.inv_declare OWNER TO sa;
+
+--
+-- Name: inv_detail; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE inv_detail (
+    date timestamp with time zone NOT NULL,
+    number character varying(14) NOT NULL,
+    sales double precision DEFAULT 0,
+    taxfree double precision DEFAULT 0,
+    void character varying(30) DEFAULT ''::character varying NOT NULL,
+    rcpt_type character varying(1) NOT NULL,
+    month_tag character varying(7) NOT NULL,
+    tax integer DEFAULT 0
+);
+
+
+ALTER TABLE public.inv_detail OWNER TO sa;
+
+--
+-- Name: inv_detail2; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE inv_detail2 (
+    shift character varying(9) NOT NULL,
+    ecr_no character varying(6) NOT NULL,
+    inv_type character varying(1) NOT NULL,
+    inv_head character varying(2) NOT NULL,
+    inv_prefix4 character varying(4) NOT NULL,
+    inv_start character varying(4) NOT NULL,
+    inv_end character varying(4) NOT NULL,
+    totalamt double precision DEFAULT 0,
+    tax double precision DEFAULT 0,
+    invoidamt double precision DEFAULT 0,
+    invoid_count integer DEFAULT 0,
+    taxfree double precision DEFAULT 0,
+    invoid_no character varying(110) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.inv_detail2 OWNER TO sa;
+
+--
+-- Name: inv_detail3; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE inv_detail3 (
+    shift character varying(9) NOT NULL,
+    ecr_no character varying(6) NOT NULL,
+    inv_type character varying(1) NOT NULL,
+    inv_head character varying(2) NOT NULL,
+    inv_prefix4 character varying(4) NOT NULL,
+    inv_start character varying(4) NOT NULL,
+    inv_end character varying(4) NOT NULL,
+    totalamt double precision DEFAULT 0,
+    tax double precision DEFAULT 0,
+    invoidamt double precision DEFAULT 0,
+    invoid_count integer DEFAULT 0,
+    taxfree double precision DEFAULT 0,
+    invoid_no character varying(110) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.inv_detail3 OWNER TO sa;
+
+--
+-- Name: inv_errcheck; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE inv_errcheck (
+    state integer DEFAULT 0,
+    number character varying(14) NOT NULL,
+    count integer DEFAULT 0,
+    void integer DEFAULT 0,
+    blank integer DEFAULT 0,
+    skip integer DEFAULT 0,
+    repeat integer DEFAULT 0,
+    remark character varying(256) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.inv_errcheck OWNER TO sa;
+
+--
+-- Name: inv_monstatistic; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE inv_monstatistic (
+    ord_no integer DEFAULT 0 NOT NULL,
+    number character varying(14) NOT NULL,
+    sales double precision DEFAULT 0,
+    sales_2 double precision DEFAULT 0,
+    sales_3 double precision DEFAULT 0,
+    tax double precision DEFAULT 0,
+    taxfree double precision DEFAULT 0,
+    empty integer DEFAULT 0,
+    void integer DEFAULT 0,
+    total double precision DEFAULT 0,
+    month_tag character varying(7) NOT NULL,
+    rcpt_type character varying(1) NOT NULL
+);
+
+
+ALTER TABLE public.inv_monstatistic OWNER TO sa;
+
+--
+-- Name: inv_month_rpt; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE inv_month_rpt (
+    ord_no integer DEFAULT 0 NOT NULL,
+    rcpt_date character varying(10) NOT NULL,
+    number character varying(14) NOT NULL,
+    sales double precision DEFAULT 0,
+    sales_2 double precision DEFAULT 0,
+    sales_3 double precision DEFAULT 0,
+    tax double precision DEFAULT 0,
+    taxfree double precision DEFAULT 0,
+    total double precision DEFAULT 0,
+    void integer DEFAULT 0,
+    month_tag character varying(7) NOT NULL,
+    rcpt_type character varying(1) NOT NULL
+);
+
+
+ALTER TABLE public.inv_month_rpt OWNER TO sa;
+
+--
+-- Name: inv_range; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE inv_range (
+    inv_date character varying(7) NOT NULL,
+    inv_start character varying(10) NOT NULL,
+    inv_end character varying(10) NOT NULL,
+    code character varying(1) NOT NULL,
+    void smallint DEFAULT 0
+);
+
+
+ALTER TABLE public.inv_range OWNER TO sa;
+
+--
+-- Name: inv_range_e; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE inv_range_e (
+    inv_date character varying(7) NOT NULL,
+    island character varying(2) NOT NULL,
+    panel character varying(2) NOT NULL,
+    inv_start character varying(10) NOT NULL,
+    inv_end character varying(10) NOT NULL,
+    need_rollno double precision DEFAULT 0,
+    active_fg smallint DEFAULT 0,
+    active_time timestamp without time zone,
+    get_rollno double precision DEFAULT 0,
+    add_user character varying(10) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.inv_range_e OWNER TO sa;
+
+--
+-- Name: inv_range_e_detl; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE inv_range_e_detl (
+    inv_date character varying(7) NOT NULL,
+    island character varying(2) NOT NULL,
+    panel character varying(2) NOT NULL,
+    inv_start character varying(10) NOT NULL,
+    inv_end character varying(10) NOT NULL,
+    roll_no double precision DEFAULT 0,
+    status smallint DEFAULT 0,
+    get_time timestamp without time zone,
+    pass_user character varying(10) DEFAULT ''::character varying,
+    pass_time timestamp without time zone,
+    get_user character varying(10) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.inv_range_e_detl OWNER TO sa;
+
+--
+-- Name: inv_sellstatistic; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE inv_sellstatistic (
+    date timestamp with time zone NOT NULL,
+    item character varying(14) NOT NULL,
+    oil_1 double precision DEFAULT 0,
+    oil_2 double precision DEFAULT 0,
+    oil_3 double precision DEFAULT 0,
+    oil_4 double precision DEFAULT 0,
+    oil_5 double precision DEFAULT 0,
+    oil_6 double precision DEFAULT 0,
+    addition double precision DEFAULT 0,
+    sales double precision DEFAULT 0,
+    tax double precision DEFAULT 0,
+    total double precision DEFAULT 0,
+    taxfree double precision DEFAULT 0,
+    code character(1) DEFAULT ''::bpchar,
+    prod_total double precision DEFAULT 0
+);
+
+
+ALTER TABLE public.inv_sellstatistic OWNER TO sa;
+
+--
+-- Name: invalid_card; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE invalid_card (
+    cust_id character varying(9) NOT NULL,
+    cust_name character varying(40) DEFAULT ''::character varying,
+    start_date character varying(10) DEFAULT ''::character varying,
+    end_date character varying(10) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.invalid_card OWNER TO sa;
+
+--
+-- Name: island_ecr; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE island_ecr (
+    island character varying(2) NOT NULL,
+    invoice_tp character varying(1) NOT NULL,
+    ecr_no character varying(6) NOT NULL
+);
+
+
+ALTER TABLE public.island_ecr OWNER TO sa;
+
+--
+-- Name: issue_check; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE issue_check (
+    tran_month character varying(5) NOT NULL,
+    island character varying(2) NOT NULL,
+    gun_no character varying(2) NOT NULL,
+    product_id character varying(13) NOT NULL,
+    accuracy double precision DEFAULT 0,
+    tot_issue double precision DEFAULT 0,
+    issue_check_value integer DEFAULT 0
+);
+
+
+ALTER TABLE public.issue_check OWNER TO sa;
+
+--
+-- Name: log_data; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE log_data (
+    date_time timestamp with time zone NOT NULL,
+    emp_id character varying(10) DEFAULT ''::character varying NOT NULL,
+    func_id character varying(3) DEFAULT ''::character varying,
+    log_desc character varying(100) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.log_data OWNER TO sa;
+
+--
+-- Name: login; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE "login" (
+    emp_id character varying(10) DEFAULT ''::character varying,
+    usr character varying(20) NOT NULL,
+    pwd character varying(20) DEFAULT ''::character varying,
+    func_id character varying(3) DEFAULT ''::character varying NOT NULL,
+    void smallint DEFAULT 0,
+    auth0 smallint DEFAULT 0,
+    auth1 smallint DEFAULT 0,
+    auth2 smallint DEFAULT 0,
+    auth3 smallint DEFAULT 0,
+    auth4 smallint DEFAULT 0,
+    auth5 smallint DEFAULT 0,
+    auth6 smallint DEFAULT 0,
+    auth7 smallint DEFAULT 0,
+    auth8 smallint DEFAULT 0,
+    auth9 smallint DEFAULT 0,
+    status smallint DEFAULT 0
+);
+
+
+ALTER TABLE public."login" OWNER TO sa;
+
+--
+-- Name: lpg_barcode_product; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE lpg_barcode_product (
+    barcode character varying(13) NOT NULL,
+    product_id character varying(13) DEFAULT ''::character varying NOT NULL
+);
+
+
+ALTER TABLE public.lpg_barcode_product OWNER TO sa;
+
+--
+-- Name: lpg_tran_detl_tmp; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE lpg_tran_detl_tmp (
+    island character(2) DEFAULT '00'::bpchar NOT NULL,
+    gun_no character(2) DEFAULT '00'::bpchar NOT NULL,
+    tran_time timestamp with time zone NOT NULL,
+    seq smallint DEFAULT 0 NOT NULL,
+    tax_type character varying(2) DEFAULT ''::character varying,
+    product_id character varying(13) DEFAULT ''::character varying,
+    "class" character varying(3) DEFAULT ''::character varying,
+    price double precision DEFAULT 0,
+    amt double precision DEFAULT 0,
+    qty double precision DEFAULT 0,
+    unit character varying(4) DEFAULT ''::character varying,
+    ref_no character varying(20) DEFAULT ''::character varying,
+    shift character varying(9) DEFAULT ''::character varying,
+    product_fg character(1) DEFAULT '0'::bpchar NOT NULL,
+    product_no character(16) DEFAULT ''::bpchar NOT NULL,
+    product_disc double precision DEFAULT 0,
+    realamt double precision DEFAULT 0
+);
+
+
+ALTER TABLE public.lpg_tran_detl_tmp OWNER TO sa;
+
+--
+-- Name: lpg_tran_tmp; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE lpg_tran_tmp (
+    island character(2) DEFAULT '00'::bpchar NOT NULL,
+    gun_no character(2) DEFAULT '00'::bpchar NOT NULL,
+    tran_time timestamp with time zone NOT NULL,
+    tax_type character varying(3) DEFAULT ''::character varying,
+    tran_amt double precision DEFAULT 0,
+    real_amt double precision DEFAULT 0,
+    inv_amt double precision DEFAULT 0,
+    tax double precision DEFAULT 0,
+    discount double precision DEFAULT 0,
+    person_id character varying(10) DEFAULT ''::character varying,
+    uid character varying(8) DEFAULT ''::character varying,
+    invoice_tp character varying(1) DEFAULT ''::character varying,
+    invoice character varying(10) DEFAULT ''::character varying,
+    invoice_cnt smallint DEFAULT 0,
+    ticket_amt double precision DEFAULT 0,
+    payment character varying(3) DEFAULT ''::character varying,
+    tran_tp character varying(3) DEFAULT ''::character varying,
+    car_no character varying(10) DEFAULT ''::character varying,
+    vip_no character varying(20) DEFAULT ''::character varying,
+    shift character varying(9) DEFAULT ''::character varying,
+    ref_no1 character varying(20) DEFAULT ''::character varying,
+    ref_no2 character varying(20) DEFAULT ''::character varying,
+    ref_no3 character varying(20) DEFAULT ''::character varying,
+    ref_no4 character varying(20) DEFAULT ''::character varying,
+    ser_no character varying(4) DEFAULT ''::character varying,
+    void smallint DEFAULT 0,
+    prt_invoice smallint DEFAULT 0,
+    an_mark character varying(6) DEFAULT ''::character varying,
+    an_ref1 character varying(20) DEFAULT ''::character varying,
+    an_ref2 character varying(20) DEFAULT ''::character varying,
+    tran_mode character varying(1) DEFAULT '1'::character varying,
+    ref_no5 character varying(20) DEFAULT ''::character varying,
+    addpoints double precision DEFAULT 0,
+    exgpoints double precision DEFAULT 0,
+    ref_no6 character varying(20) DEFAULT ''::character varying,
+    ref_no7 character varying(20) DEFAULT ''::character varying,
+    ref_no8 character varying(20) DEFAULT ''::character varying,
+    product_fg character(1) DEFAULT '0'::bpchar NOT NULL,
+    product_no character varying(16) DEFAULT ''::character varying NOT NULL
+);
+
+
+ALTER TABLE public.lpg_tran_tmp OWNER TO sa;
+
+--
+-- Name: lpgcardata; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE lpgcardata (
+    car_no character varying(10) NOT NULL,
+    effect_date character varying(8) DEFAULT ''::character varying,
+    chk_date character varying(8) DEFAULT ''::character varying,
+    ref_no1 character varying(20) DEFAULT ''::character varying,
+    ref_no2 character varying(20) DEFAULT ''::character varying,
+    ref_no3 character varying(20) DEFAULT ''::character varying,
+    ref_no4 character varying(40) DEFAULT ''::character varying,
+    ref_no5 character varying(20) DEFAULT ''::character varying,
+    ref_no6 character varying(20) DEFAULT ''::character varying,
+    ref_no7 character varying(20) DEFAULT ''::character varying,
+    ref_no8 character varying(20) DEFAULT ''::character varying,
+    ref_no9 character varying(20) DEFAULT ''::character varying,
+    ref_no10 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.lpgcardata OWNER TO sa;
+
+--
+-- Name: multideal_prod; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE multideal_prod (
+    product_id character varying(13) NOT NULL,
+    seq smallint DEFAULT 0 NOT NULL,
+    amt double precision DEFAULT 0
+);
+
+
+ALTER TABLE public.multideal_prod OWNER TO sa;
+
+--
+-- Name: oil_change; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE oil_change (
+    sys_no integer NOT NULL,
+    bill_no character varying(10) DEFAULT ''::character varying,
+    trans_date timestamp with time zone,
+    source character varying(10) DEFAULT ''::character varying,
+    target character varying(10) DEFAULT ''::character varying,
+    prod_id character varying(13) DEFAULT ''::character varying,
+    del_mark character varying(1) DEFAULT ''::character varying,
+    shift character varying(9) DEFAULT ''::character varying NOT NULL,
+    state character varying(1) DEFAULT ''::character varying,
+    begin_time timestamp with time zone,
+    end_time timestamp with time zone,
+    car_no character varying(10) DEFAULT ''::character varying,
+    port_no1 character varying(2) DEFAULT ''::character varying,
+    port_qty1 double precision DEFAULT 0,
+    port_no2 character varying(2) DEFAULT ''::character varying,
+    port_qty2 double precision DEFAULT 0,
+    transport character varying(2) DEFAULT ''::character varying,
+    target_tank character varying(2) DEFAULT ''::character varying NOT NULL,
+    gasoline_vol double precision DEFAULT 0,
+    real_vol double precision DEFAULT 0,
+    car_temp double precision DEFAULT 0,
+    tank_temp double precision DEFAULT 0,
+    consol_man character varying(10) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.oil_change OWNER TO sa;
+
+--
+-- Name: oil_check; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE oil_check (
+    shift character varying(9) NOT NULL,
+    ser_no character varying(5) DEFAULT ''::character varying,
+    tank_no character varying(2) NOT NULL,
+    status smallint DEFAULT 0,
+    qty double precision DEFAULT 0,
+    memo character varying(100) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.oil_check OWNER TO sa;
+
+--
+-- Name: oil_source; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE oil_source (
+    oilsource_id character varying(5) NOT NULL,
+    oilsource_name character varying(40) DEFAULT ''::character varying,
+    port_no character varying(2) NOT NULL,
+    product_id character varying(13) DEFAULT ''::character varying,
+    product_name character varying(20) DEFAULT ''::character varying,
+    memo character varying(100) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.oil_source OWNER TO sa;
+
+--
+-- Name: payment; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE payment (
+    pay_id character varying(3) DEFAULT ''::character varying NOT NULL,
+    card_no character varying(20) DEFAULT ''::character varying NOT NULL,
+    pay_desc character varying(50) DEFAULT ''::character varying,
+    tax_type character varying(2) DEFAULT ''::character varying,
+    prt_invoice1 smallint DEFAULT 0,
+    prt_invoice2 smallint DEFAULT 0,
+    ref_no character varying(20) DEFAULT ''::character varying,
+    cust_id character varying(10) DEFAULT ''::character varying,
+    credit_line double precision DEFAULT 0,
+    balance double precision DEFAULT 0,
+    private smallint DEFAULT 0,
+    last_balance double precision DEFAULT 0
+);
+
+
+ALTER TABLE public.payment OWNER TO sa;
+
+--
+-- Name: prepaid; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE prepaid (
+    shift character varying(9) DEFAULT ''::character varying NOT NULL,
+    ord_no smallint DEFAULT 0 NOT NULL,
+    island character(2) DEFAULT '00'::bpchar,
+    mon1 double precision DEFAULT 0,
+    emp_id1 character varying(10) DEFAULT ''::character varying,
+    emp_id2 character varying(10) DEFAULT ''::character varying,
+    inputdate timestamp with time zone
+);
+
+
+ALTER TABLE public.prepaid OWNER TO sa;
+
+--
+-- Name: prod_check; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE prod_check (
+    tran_month character varying(5) NOT NULL,
+    product_id character varying(13) NOT NULL,
+    issue_check_value integer DEFAULT 0,
+    tran_check_value integer DEFAULT 0,
+    temp_check_value integer DEFAULT 0,
+    tot_check_value integer DEFAULT 0,
+    oil_check_value integer DEFAULT 0,
+    other_check_value integer DEFAULT 0,
+    tot_issue double precision DEFAULT 0,
+    tot_tran double precision DEFAULT 0,
+    check_mark character varying(1) DEFAULT ''::character varying,
+    this_check_shift character varying(9) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.prod_check OWNER TO sa;
+
+--
+-- Name: prod_sale; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE prod_sale (
+    product_id character varying(3) DEFAULT ''::character varying NOT NULL,
+    sqe smallint DEFAULT 0 NOT NULL,
+    eff_date timestamp with time zone,
+    end_date timestamp with time zone,
+    "cycle" character varying(7) DEFAULT ''::character varying,
+    pay_id character varying(3) DEFAULT ''::character varying,
+    base_qty double precision DEFAULT 0,
+    disc_qty double precision DEFAULT 0,
+    disc_amt double precision DEFAULT 0,
+    disc_rate double precision DEFAULT 0,
+    promote_desc double precision DEFAULT 0,
+    status smallint DEFAULT 0
+);
+
+
+ALTER TABLE public.prod_sale OWNER TO sa;
+
+--
+-- Name: product; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE product (
+    product_id character varying(13) NOT NULL,
+    name character varying(40) DEFAULT ''::character varying,
+    spec character varying(10) DEFAULT ''::character varying,
+    class_major character varying(2),
+    class_middle character varying(2),
+    class_small character varying(2),
+    "class" character varying(3),
+    unit character varying(4) DEFAULT ''::character varying,
+    price double precision DEFAULT 0,
+    cost double precision DEFAULT 0,
+    barcode character varying(30) DEFAULT ''::character varying,
+    tax_type smallint DEFAULT 0,
+    order_amt double precision DEFAULT 0,
+    cust_id character varying(10) DEFAULT ''::character varying,
+    stock_safe double precision DEFAULT 0,
+    prt_invoice smallint DEFAULT 0,
+    prt_sheet smallint DEFAULT 0,
+    shop_fg smallint DEFAULT 0,
+    stock_fg smallint DEFAULT 0,
+    fluid_fg smallint DEFAULT 0,
+    status smallint DEFAULT 0,
+    vip_point integer DEFAULT 0,
+    disc_mode character varying(3) DEFAULT ''::character varying,
+    disc_class character varying(3) DEFAULT ''::character varying,
+    disc_fg character varying(1) DEFAULT '0'::character varying,
+    memo1 character varying(20) DEFAULT ''::character varying,
+    memo2 character varying(20) DEFAULT ''::character varying,
+    memo3 character varying(20) DEFAULT ''::character varying,
+    scrap_fg integer DEFAULT 0,
+    health_fee integer DEFAULT 0,
+    memo4 character varying(20) DEFAULT ''::character varying,
+    memo5 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.product OWNER TO sa;
+
+--
+-- Name: promo_discpid; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE promo_discpid (
+    promo_no character varying(20) NOT NULL,
+    product_id character varying(13) NOT NULL,
+    disc_pid character varying(20) NOT NULL,
+    disc_name character varying(50) DEFAULT ''::character varying,
+    memo character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.promo_discpid OWNER TO sa;
+
+--
+-- Name: promo_main; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE promo_main (
+    promo_no character varying(20) NOT NULL,
+    "mode" character varying(3) DEFAULT ''::character varying,
+    station character varying(5) DEFAULT ''::character varying,
+    item1 character varying(20) DEFAULT ''::character varying,
+    item2 character varying(20) DEFAULT ''::character varying,
+    item3 character varying(20) DEFAULT ''::character varying,
+    item4 character varying(20) DEFAULT ''::character varying,
+    item5 character varying(20) DEFAULT ''::character varying,
+    item6 character varying(20) DEFAULT ''::character varying,
+    item7 character varying(20) DEFAULT ''::character varying,
+    item8 character varying(20) DEFAULT ''::character varying,
+    item9 character varying(20) DEFAULT ''::character varying,
+    item10 character varying(20) DEFAULT ''::character varying,
+    item11 character varying(20) DEFAULT ''::character varying,
+    item12 character varying(20) DEFAULT ''::character varying,
+    item13 character varying(20) DEFAULT ''::character varying,
+    item14 character varying(20) DEFAULT ''::character varying,
+    item15 character varying(20) DEFAULT ''::character varying,
+    memo character varying(100) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.promo_main OWNER TO sa;
+
+--
+-- Name: promo_product; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE promo_product (
+    promo_no character varying(20) NOT NULL,
+    product_id character varying(13) NOT NULL,
+    promo_pid character varying(20) NOT NULL,
+    sdate character varying(20) DEFAULT ''::character varying,
+    edate character varying(20) DEFAULT ''::character varying,
+    stime character varying(20) DEFAULT ''::character varying,
+    etime character varying(20) DEFAULT ''::character varying,
+    time_promo character(1) DEFAULT ''::bpchar,
+    memo character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.promo_product OWNER TO sa;
+
+--
+-- Name: set_island; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE set_island (
+    island character(2) NOT NULL,
+    gun_no character(2) NOT NULL,
+    product_id character varying(13) DEFAULT ''::character varying,
+    tank character varying(2) DEFAULT ''::character varying,
+    panel character varying(2) DEFAULT ''::character varying,
+    machine character varying(2) DEFAULT ''::character varying,
+    errorrate double precision DEFAULT 0,
+    comport character varying(2) DEFAULT ''::character varying,
+    comindex character varying(2) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.set_island OWNER TO sa;
+
+--
+-- Name: set_islanddisc; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE set_islanddisc (
+    island character varying(2) NOT NULL,
+    "class" character varying(3) NOT NULL,
+    product_id character varying(13) NOT NULL,
+    setvalue double precision DEFAULT 0,
+    memo1 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.set_islanddisc OWNER TO sa;
+
+--
+-- Name: set_self; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE set_self (
+    island character(2) NOT NULL,
+    panel character varying(2) NOT NULL,
+    machine character varying(2) DEFAULT ''::character varying,
+    pump_id character varying(2) DEFAULT ''::character varying,
+    "mode" character varying(2) DEFAULT '01'::character varying,
+    prt_no character varying(10) DEFAULT ''::character varying,
+    comport character varying(2) DEFAULT ''::character varying,
+    memo1 character varying(10) DEFAULT ''::character varying,
+    memo2 character varying(10) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.set_self OWNER TO sa;
+
+--
+-- Name: set_self_oil; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE set_self_oil (
+    payment character(3) NOT NULL,
+    product_id character varying(13) NOT NULL,
+    name character varying(20) NOT NULL,
+    dis_product_id character varying(13) NOT NULL,
+    dis_barcode character varying(13) NOT NULL,
+    dis_name character varying(20) NOT NULL,
+    discount double precision DEFAULT 0,
+    createdate timestamp with time zone NOT NULL,
+    uploaddate timestamp with time zone,
+    memo character varying(10) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.set_self_oil OWNER TO sa;
+
+--
+-- Name: set_self_oil_tmp; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE set_self_oil_tmp (
+    payment character(3) NOT NULL,
+    product_id character varying(13) NOT NULL,
+    name character varying(20) NOT NULL,
+    dis_product_id character varying(13) NOT NULL,
+    dis_barcode character varying(13) NOT NULL,
+    dis_name character varying(20) NOT NULL,
+    discount double precision DEFAULT 0,
+    createdate timestamp with time zone NOT NULL,
+    uploaddate timestamp with time zone,
+    memo character varying(10) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.set_self_oil_tmp OWNER TO sa;
+
+--
+-- Name: set_self_setprint; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE set_self_setprint (
+    port_no character varying(2) DEFAULT ''::character varying,
+    prt_no character varying(10) DEFAULT ''::character varying,
+    memo1 character varying(10) DEFAULT ''::character varying,
+    memo2 character varying(10) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.set_self_setprint OWNER TO sa;
+
+--
+-- Name: set_self_tran; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE set_self_tran (
+    island character(2) DEFAULT '00'::bpchar NOT NULL,
+    gun_no character(2) DEFAULT '00'::bpchar NOT NULL,
+    tran_time timestamp with time zone NOT NULL,
+    vip_point double precision DEFAULT 0,
+    vip_upload_fg character(1) DEFAULT '0'::bpchar,
+    prt_no character varying(6) DEFAULT ''::character varying,
+    msr_cardno character varying(30) DEFAULT ''::character varying,
+    s_tracerno character varying(12) DEFAULT ''::character varying,
+    app_code character varying(6) DEFAULT ''::character varying,
+    edc_invoiceno character varying(6) DEFAULT ''::character varying,
+    terminalno character varying(8) DEFAULT ''::character varying,
+    batchno character varying(6) DEFAULT ''::character varying,
+    edc_tran_time timestamp with time zone,
+    shift character varying(9) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.set_self_tran OWNER TO sa;
+
+--
+-- Name: set_self_tran_tmp; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE set_self_tran_tmp (
+    island character(2) DEFAULT '00'::bpchar NOT NULL,
+    gun_no character(2) DEFAULT '00'::bpchar NOT NULL,
+    tran_time timestamp with time zone NOT NULL,
+    vip_point double precision DEFAULT 0,
+    vip_upload_fg character(1) DEFAULT '0'::bpchar,
+    prt_no character varying(6) DEFAULT ''::character varying,
+    msr_cardno character varying(30) DEFAULT ''::character varying,
+    s_tracerno character varying(12) DEFAULT ''::character varying,
+    app_code character varying(6) DEFAULT ''::character varying,
+    edc_invoiceno character varying(6) DEFAULT ''::character varying,
+    terminalno character varying(8) DEFAULT ''::character varying,
+    batchno character varying(6) DEFAULT ''::character varying,
+    edc_tran_time timestamp with time zone,
+    tran_amt double precision DEFAULT 0,
+    real_amt double precision DEFAULT 0,
+    inv_amt double precision DEFAULT 0,
+    payment character varying(3) DEFAULT ''::character varying,
+    tran_tp character varying(3) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.set_self_tran_tmp OWNER TO sa;
+
+--
+-- Name: set_self_vip; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE set_self_vip (
+    product_id character varying(13) NOT NULL,
+    p_level double precision DEFAULT 0,
+    p_rela double precision DEFAULT 0,
+    p_point double precision DEFAULT 0,
+    eff_date timestamp with time zone,
+    end_date timestamp with time zone,
+    createdate timestamp with time zone NOT NULL,
+    uploaddate timestamp with time zone,
+    memo character varying(10) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.set_self_vip OWNER TO sa;
+
+--
+-- Name: set_self_vip_tmp; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE set_self_vip_tmp (
+    product_id character varying(13) NOT NULL,
+    p_level double precision DEFAULT 0,
+    p_rela double precision DEFAULT 0,
+    p_point double precision DEFAULT 0,
+    eff_date timestamp with time zone,
+    end_date timestamp with time zone,
+    createdate timestamp with time zone NOT NULL,
+    uploaddate timestamp with time zone,
+    memo character varying(10) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.set_self_vip_tmp OWNER TO sa;
+
+--
+-- Name: set_system; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE set_system (
+    set_id character varying(10) DEFAULT ''::character varying NOT NULL,
+    set_isno character varying(4) DEFAULT ''::character varying NOT NULL,
+    set_name character varying(20) DEFAULT ''::character varying NOT NULL,
+    set_value character varying(40) DEFAULT ''::character varying NOT NULL
+);
+
+
+ALTER TABLE public.set_system OWNER TO sa;
+
+--
+-- Name: set_ticket; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE set_ticket (
+    code_id character varying(3) NOT NULL,
+    name character varying(10) DEFAULT ''::character varying,
+    money integer DEFAULT 0
+);
+
+
+ALTER TABLE public.set_ticket OWNER TO sa;
+
+--
+-- Name: setdata; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE setdata (
+    settable character varying(20) DEFAULT ''::character varying NOT NULL
+);
+
+
+ALTER TABLE public.setdata OWNER TO sa;
+
+--
+-- Name: shift; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE shift (
+    shift smallint NOT NULL,
+    shift_name character varying(10) DEFAULT ''::character varying,
+    begin_time character varying(5) DEFAULT ''::character varying,
+    end_time character varying(5) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.shift OWNER TO sa;
+
+--
+-- Name: shift_01_gun; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE shift_01_gun (
+    shift character varying(9) NOT NULL,
+    status character varying(4) DEFAULT ''::character varying,
+    island character(2) DEFAULT '00'::bpchar NOT NULL,
+    gun_no character(2) DEFAULT '00'::bpchar NOT NULL,
+    tank_no character(2) DEFAULT '00'::bpchar,
+    product_id character varying(13) DEFAULT ''::character varying,
+    oilname character varying(20) DEFAULT ''::character varying,
+    price double precision DEFAULT 0,
+    start_qty double precision DEFAULT 0,
+    now_qty double precision DEFAULT 0,
+    out_qty double precision DEFAULT 0,
+    test_qty double precision DEFAULT 0,
+    walk_qty double precision DEFAULT 0,
+    sale_qty double precision DEFAULT 0,
+    start_amt double precision DEFAULT 0,
+    now_amt double precision DEFAULT 0,
+    out_amt double precision DEFAULT 0,
+    test_amt double precision DEFAULT 0,
+    walk_amt double precision DEFAULT 0,
+    sale_amt double precision DEFAULT 0,
+    sale_qty_amt double precision DEFAULT 0,
+    diff_amt double precision DEFAULT 0,
+    start_gear_qty double precision,
+    now_gear_qty double precision
+);
+
+
+ALTER TABLE public.shift_01_gun OWNER TO sa;
+
+--
+-- Name: shift_02_oil; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE shift_02_oil (
+    shift character varying(9) NOT NULL,
+    product_id character varying(13) DEFAULT ''::character varying NOT NULL,
+    oilname character varying(20) DEFAULT ''::character varying,
+    sale_vol double precision DEFAULT 0,
+    price double precision DEFAULT 0,
+    sale_amt1 double precision DEFAULT 0,
+    sale_amt2 double precision DEFAULT 0,
+    disc_qty double precision DEFAULT 0,
+    disc_amt double precision DEFAULT 0,
+    ticket_qty double precision DEFAULT 0,
+    ticket_amt double precision DEFAULT 0,
+    cdc_qty double precision DEFAULT 0,
+    cdc_amt double precision DEFAULT 0,
+    cdc_qty2 double precision DEFAULT 0,
+    cdc_amt2 double precision DEFAULT 0,
+    credit_qty double precision DEFAULT 0,
+    credit_amt double precision DEFAULT 0,
+    user_qty double precision DEFAULT 0,
+    user_amt double precision DEFAULT 0,
+    car_qty double precision DEFAULT 0,
+    car_amt double precision DEFAULT 0,
+    other_qty double precision DEFAULT 0,
+    other_amt double precision DEFAULT 0,
+    test_qty double precision DEFAULT 0,
+    test_amt double precision DEFAULT 0,
+    walk_qty double precision DEFAULT 0,
+    walk_amt double precision DEFAULT 0,
+    taxfree_qty double precision DEFAULT 0,
+    taxfree_amt double precision DEFAULT 0,
+    sale_mon double precision DEFAULT 0,
+    sale_qty double precision DEFAULT 0,
+    stock double precision DEFAULT 0,
+    tot_cash_1 double precision DEFAULT 0,
+    tot_cash_2 double precision DEFAULT 0,
+    diff_amt double precision DEFAULT 0
+);
+
+
+ALTER TABLE public.shift_02_oil OWNER TO sa;
+
+--
+-- Name: shift_03_tank; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE shift_03_tank (
+    shift character varying(9) NOT NULL,
+    tank character varying(2) DEFAULT '00'::character varying NOT NULL,
+    oilname character varying(20) DEFAULT ''::character varying,
+    account1 double precision DEFAULT 0,
+    real_stock1 double precision DEFAULT 0,
+    in_stock double precision DEFAULT 0,
+    in_price double precision DEFAULT 0,
+    sale double precision DEFAULT 0,
+    surplus_1 double precision DEFAULT 0,
+    surplus_2 double precision DEFAULT 0,
+    surplus_3 double precision DEFAULT 0,
+    surplus_4 double precision DEFAULT 0,
+    checkstock double precision DEFAULT 0,
+    count double precision DEFAULT 0,
+    real2 double precision DEFAULT 0,
+    account2 double precision DEFAULT 0,
+    diff_vol double precision DEFAULT 0,
+    oil_hight real DEFAULT 0,
+    water_hight real DEFAULT 0
+);
+
+
+ALTER TABLE public.shift_03_tank OWNER TO sa;
+
+--
+-- Name: shift_04_stock; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE shift_04_stock (
+    shift character varying(9) NOT NULL,
+    product_id character varying(13) DEFAULT ''::character varying NOT NULL,
+    bef_stock double precision DEFAULT 0,
+    in_qty double precision DEFAULT 0,
+    in_price double precision DEFAULT 0,
+    sale_qty double precision DEFAULT 0,
+    sale_price double precision DEFAULT 0,
+    sale_amt integer DEFAULT 0,
+    user_qty double precision DEFAULT 0,
+    user_amt integer DEFAULT 0,
+    check_qty double precision DEFAULT 0,
+    out_qty double precision DEFAULT 0,
+    stock double precision DEFAULT 0,
+    abert_qty double precision DEFAULT 0,
+    chg_qty double precision DEFAULT 0,
+    discr_qty double precision DEFAULT 0
+);
+
+
+ALTER TABLE public.shift_04_stock OWNER TO sa;
+
+--
+-- Name: shift_05; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE shift_05 (
+    shift character varying(9) NOT NULL,
+    island character(2) DEFAULT ''::bpchar NOT NULL,
+    oil_amt_1 double precision DEFAULT 0,
+    oil_amt_2 double precision DEFAULT 0,
+    goods_amt double precision DEFAULT 0,
+    tot_amt_1 double precision DEFAULT 0,
+    tot_amt_2 double precision DEFAULT 0,
+    oil_disc double precision DEFAULT 0,
+    prod_disc double precision DEFAULT 0,
+    ticket_amt double precision DEFAULT 0,
+    cdc1_amt double precision DEFAULT 0,
+    cdc2_amt double precision DEFAULT 0,
+    credit_amt double precision DEFAULT 0,
+    user_amt double precision DEFAULT 0,
+    carcard_amt double precision DEFAULT 0,
+    multi_amt double precision DEFAULT 0,
+    other_amt double precision DEFAULT 0,
+    taxfree_amt double precision DEFAULT 0,
+    cash_amt1 double precision DEFAULT 0,
+    cash_amt2 double precision DEFAULT 0,
+    advance double precision DEFAULT 0,
+    payable double precision DEFAULT 0,
+    "real" double precision DEFAULT 0,
+    diff_amt1 double precision DEFAULT 0,
+    diff_amt2 double precision DEFAULT 0,
+    person_id1 character varying(10) DEFAULT ''::character varying,
+    person_id2 character varying(10) DEFAULT ''::character varying,
+    repair_inv double precision DEFAULT 0,
+    invoice_amt_1 double precision DEFAULT 0,
+    invoice_amt_2 double precision DEFAULT 0,
+    void_amt double precision DEFAULT 0,
+    tot_invoice double precision DEFAULT 0
+);
+
+
+ALTER TABLE public.shift_05 OWNER TO sa;
+
+--
+-- Name: shift_06; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE shift_06 (
+    shift character varying(9) DEFAULT ''::character varying NOT NULL,
+    island character varying(2) DEFAULT ''::character varying NOT NULL,
+    product_id character varying(13) DEFAULT ''::character varying NOT NULL,
+    "class" character varying(5) DEFAULT ''::character varying NOT NULL,
+    name character varying(40) DEFAULT ''::character varying,
+    amt integer DEFAULT 0
+);
+
+
+ALTER TABLE public.shift_06 OWNER TO sa;
+
+--
+-- Name: shift_mark; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE shift_mark (
+    shift character varying(9) NOT NULL,
+    "time" timestamp with time zone,
+    times integer,
+    status character varying(1)
+);
+
+
+ALTER TABLE public.shift_mark OWNER TO sa;
+
+--
+-- Name: shift_other; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE shift_other (
+    shift character varying(9) DEFAULT ''::character varying NOT NULL,
+    product_id character varying(13) DEFAULT ''::character varying NOT NULL,
+    name character varying(40) DEFAULT ''::character varying,
+    money integer DEFAULT 0
+);
+
+
+ALTER TABLE public.shift_other OWNER TO sa;
+
+--
+-- Name: shift_ticket_detail; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE shift_ticket_detail (
+    shift character varying(9) DEFAULT ''::character varying NOT NULL,
+    product_id character varying(13) DEFAULT ''::character varying NOT NULL,
+    name character varying(20) DEFAULT ''::character varying,
+    money integer DEFAULT 0,
+    tk_count integer DEFAULT 0,
+    tk_money integer DEFAULT 0
+);
+
+
+ALTER TABLE public.shift_ticket_detail OWNER TO sa;
+
+--
+-- Name: sptb_car_data; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE sptb_car_data (
+    car_no character(10) NOT NULL,
+    vip_no character(16) DEFAULT ''::bpchar,
+    name character(12) DEFAULT ''::bpchar,
+    car_brand character varying(20) DEFAULT ''::character varying,
+    zip character varying(6) DEFAULT ''::character varying,
+    add1 character varying(10) DEFAULT ''::character varying,
+    add2 character varying(10) DEFAULT ''::character varying,
+    add3 character varying(80) DEFAULT ''::character varying,
+    add4 character varying(10) DEFAULT ''::character varying,
+    add5 character varying(10) DEFAULT ''::character varying,
+    add6 character varying(80) DEFAULT ''::character varying,
+    tel character varying(11) DEFAULT ''::character varying,
+    mobil character varying(11) DEFAULT ''::character varying,
+    email character varying(32) DEFAULT ''::character varying,
+    rcpt_id character varying(8) DEFAULT ''::character varying,
+    create_id character(10) NOT NULL,
+    createdate timestamp with time zone,
+    update_id character(10) NOT NULL,
+    updatedate timestamp with time zone,
+    abortmemo character(1) DEFAULT '0'::bpchar,
+    memo1 character varying(20) DEFAULT ''::character varying,
+    memo2 character varying(20) DEFAULT ''::character varying,
+    sex character varying(1) DEFAULT '1'::character varying,
+    birthday timestamp with time zone,
+    car_model character varying(20) DEFAULT ''::character varying,
+    car_type character varying(2) DEFAULT '01'::character varying,
+    product_year character varying(6) DEFAULT ''::character varying,
+    issue_date timestamp with time zone,
+    insurance_date timestamp with time zone,
+    exhaust_value character varying(6) DEFAULT ''::character varying,
+    memo3 character varying(20) DEFAULT ''::character varying,
+    memo4 character varying(20) DEFAULT ''::character varying,
+    memo5 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.sptb_car_data OWNER TO sa;
+
+--
+-- Name: sptb_car_detail; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE sptb_car_detail (
+    work_no character(16) NOT NULL,
+    trans_seq integer NOT NULL,
+    product_id character(16) NOT NULL,
+    product_name character varying(40) DEFAULT ''::character varying,
+    "class" character(3) DEFAULT ''::bpchar,
+    price double precision DEFAULT 0,
+    qty double precision DEFAULT 0,
+    amt double precision DEFAULT 0,
+    unit character varying(4) DEFAULT ''::character varying,
+    tax_type character varying(2) DEFAULT ''::character varying,
+    prt_invoice integer DEFAULT 0,
+    ref_no character varying(20) DEFAULT ''::character varying,
+    product_cost double precision DEFAULT 0,
+    product_billno character varying(15) DEFAULT ''::character varying,
+    product_memo character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.sptb_car_detail OWNER TO sa;
+
+--
+-- Name: sptb_car_tran; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE sptb_car_tran (
+    work_no character(16) NOT NULL,
+    shift character(9) DEFAULT ''::bpchar,
+    car_no character(10) NOT NULL,
+    station_id character(5) NOT NULL,
+    trans_date timestamp with time zone NOT NULL,
+    kileage character varying(7) DEFAULT ''::character varying,
+    svr_name character varying(12) DEFAULT ''::character varying,
+    problem character varying(100) DEFAULT ''::character varying,
+    result character varying(100) DEFAULT ''::character varying,
+    "close" character(1) DEFAULT '0'::bpchar,
+    tran_amt double precision DEFAULT 0,
+    usrrcpt_no character varying(8) DEFAULT ''::character varying,
+    memo1 character varying(20) DEFAULT ''::character varying,
+    memo2 character varying(20) DEFAULT ''::character varying,
+    tran_mode character varying(1) DEFAULT '2'::character varying,
+    cpc_billno character varying(20) DEFAULT ''::character varying,
+    cpc_unitno character varying(5) DEFAULT ''::character varying,
+    cpc_unit_usedno character varying(10) DEFAULT ''::character varying,
+    cpc_unit_costno character varying(25) DEFAULT ''::character varying,
+    vip_no character varying(16) DEFAULT ''::character varying,
+    other_cardno character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.sptb_car_tran OWNER TO sa;
+
+--
+-- Name: sptb_region; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE sptb_region (
+    zip_code character varying(6) NOT NULL,
+    root_id character(2) NOT NULL,
+    root_fg integer NOT NULL,
+    reg_name character varying(10) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.sptb_region OWNER TO sa;
+
+--
+-- Name: stock_adjust; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE stock_adjust (
+    sys_no integer DEFAULT 0,
+    bill_no character varying(15) DEFAULT ''::character varying NOT NULL,
+    tran_time timestamp with time zone,
+    exp_st character varying(10) DEFAULT ''::character varying,
+    exp_wh character varying(3) DEFAULT ''::character varying,
+    imp_st character varying(10) DEFAULT ''::character varying,
+    imp_wh character varying(3) DEFAULT ''::character varying,
+    void smallint DEFAULT 0,
+    shift character varying(9) DEFAULT ''::character varying,
+    memo character varying(100) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.stock_adjust OWNER TO sa;
+
+--
+-- Name: stock_back; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE stock_back (
+    sys_no integer DEFAULT 0 NOT NULL,
+    bill_no character varying(15) DEFAULT ''::character varying,
+    tran_time timestamp with time zone,
+    ref_no1 character varying(20) DEFAULT ''::character varying,
+    contact character varying(15) DEFAULT ''::character varying,
+    tax_type character varying(2) DEFAULT ''::character varying,
+    amount double precision DEFAULT 0,
+    tax double precision DEFAULT 0,
+    revoke_date timestamp with time zone,
+    void smallint DEFAULT 0,
+    rtn_type character varying(1) DEFAULT ''::character varying,
+    shift character varying(9) DEFAULT ''::character varying,
+    memo character varying(100) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.stock_back OWNER TO sa;
+
+--
+-- Name: stock_check; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE stock_check (
+    sys_no integer DEFAULT 0 NOT NULL,
+    bill_no character varying(15) DEFAULT ''::character varying,
+    tran_time timestamp with time zone,
+    ref_no1 character varying(20) DEFAULT ''::character varying,
+    void smallint DEFAULT 0,
+    rtn_type character varying(1) DEFAULT ''::character varying,
+    shift character varying(9) DEFAULT ''::character varying,
+    memo character varying(100) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.stock_check OWNER TO sa;
+
+--
+-- Name: stock_in; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE stock_in (
+    sys_no integer DEFAULT 0 NOT NULL,
+    bill_no character varying(15) DEFAULT ''::character varying,
+    tran_time timestamp with time zone,
+    ref_no1 character varying(20) DEFAULT ''::character varying,
+    ref_no2 character varying(20) DEFAULT ''::character varying,
+    contact character varying(15) DEFAULT ''::character varying,
+    tax_type character varying(2) DEFAULT ''::character varying,
+    amount double precision DEFAULT 0,
+    tax double precision DEFAULT 0,
+    revoke_date timestamp with time zone,
+    void smallint DEFAULT 0,
+    shift character varying(9) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.stock_in OWNER TO sa;
+
+--
+-- Name: stock_iorder; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE stock_iorder (
+    billno character varying(10) DEFAULT ''::character varying NOT NULL,
+    orderkind character varying(1) DEFAULT '0'::character varying,
+    check_fg character varying(1) DEFAULT '0'::character varying,
+    upload_fg character varying(1) DEFAULT '0'::character varying,
+    iordertdate timestamp with time zone,
+    creatdate timestamp with time zone,
+    checkdate timestamp with time zone,
+    shift character varying(9) DEFAULT ''::character varying,
+    memo1 character varying(20) DEFAULT ''::character varying,
+    memo2 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.stock_iorder OWNER TO sa;
+
+--
+-- Name: stock_iorder_detail; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE stock_iorder_detail (
+    billno character varying(10) DEFAULT ''::character varying NOT NULL,
+    seq smallint DEFAULT 0 NOT NULL,
+    product_id character varying(13) DEFAULT ''::character varying,
+    qty double precision DEFAULT 0,
+    checkqty double precision DEFAULT 0,
+    orderdate timestamp with time zone,
+    modily_fg character varying(1) DEFAULT '0'::character varying,
+    memo1 character varying(20) DEFAULT ''::character varying,
+    memo2 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.stock_iorder_detail OWNER TO sa;
+
+--
+-- Name: stock_order; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE stock_order (
+    orderdate timestamp with time zone NOT NULL,
+    upload_fg character varying(1) DEFAULT '0'::character varying,
+    creatdate timestamp with time zone,
+    modilydate timestamp with time zone,
+    memo1 character varying(20) DEFAULT ''::character varying,
+    memo2 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.stock_order OWNER TO sa;
+
+--
+-- Name: stock_order_detail; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE stock_order_detail (
+    orderdate timestamp with time zone NOT NULL,
+    seq smallint DEFAULT 0 NOT NULL,
+    product_id character varying(13) DEFAULT ''::character varying,
+    orderkind character varying(1) DEFAULT '0'::character varying,
+    qty double precision DEFAULT 0,
+    del_fg double precision DEFAULT 0,
+    modilydate timestamp with time zone,
+    memo1 character varying(20) DEFAULT ''::character varying,
+    memo2 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.stock_order_detail OWNER TO sa;
+
+--
+-- Name: stock_out; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE stock_out (
+    sys_no integer DEFAULT 0 NOT NULL,
+    bill_no character varying(15) DEFAULT ''::character varying,
+    tran_time timestamp with time zone,
+    ref_no1 character varying(20) DEFAULT ''::character varying,
+    void smallint DEFAULT 0,
+    shift character varying(9) DEFAULT ''::character varying,
+    memo character varying(100) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.stock_out OWNER TO sa;
+
+--
+-- Name: stock_prod; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE stock_prod (
+    product_id character varying(15) DEFAULT ''::character varying NOT NULL,
+    yymm character varying(4) DEFAULT ''::character varying NOT NULL,
+    wh character varying(3) DEFAULT ''::character varying NOT NULL,
+    first_qty_1 double precision DEFAULT 0,
+    in_qty_1 double precision DEFAULT 0,
+    out_qty_1 double precision DEFAULT 0,
+    first_qty_2 double precision DEFAULT 0,
+    in_qty_2 double precision DEFAULT 0,
+    out_qty_2 double precision DEFAULT 0,
+    first_qty_3 double precision DEFAULT 0,
+    in_qty_3 double precision DEFAULT 0,
+    out_qty_3 double precision DEFAULT 0,
+    first_qty_4 double precision DEFAULT 0,
+    in_qty_4 double precision DEFAULT 0,
+    out_qty_4 double precision DEFAULT 0,
+    first_qty_5 double precision DEFAULT 0,
+    in_qty_5 double precision DEFAULT 0,
+    out_qty_5 double precision DEFAULT 0,
+    first_qty_6 double precision DEFAULT 0,
+    in_qty_6 double precision DEFAULT 0,
+    out_qty_6 double precision DEFAULT 0,
+    first_qty_7 double precision DEFAULT 0,
+    in_qty_7 double precision DEFAULT 0,
+    out_qty_7 double precision DEFAULT 0,
+    first_qty_8 double precision DEFAULT 0,
+    in_qty_8 double precision DEFAULT 0,
+    out_qty_8 double precision DEFAULT 0,
+    first_qty_9 double precision DEFAULT 0,
+    in_qty_9 double precision DEFAULT 0,
+    out_qty_9 double precision DEFAULT 0,
+    first_qty_10 double precision DEFAULT 0,
+    in_qty_10 double precision DEFAULT 0,
+    out_qty_10 double precision DEFAULT 0,
+    first_qty_11 double precision DEFAULT 0,
+    in_qty_11 double precision DEFAULT 0,
+    out_qty_11 double precision DEFAULT 0,
+    first_qty_12 double precision DEFAULT 0,
+    in_qty_12 double precision DEFAULT 0,
+    out_qty_12 double precision DEFAULT 0,
+    stock_cost double precision DEFAULT 0
+);
+
+
+ALTER TABLE public.stock_prod OWNER TO sa;
+
+--
+-- Name: stock_tran; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE stock_tran (
+    stock_type character varying(3) DEFAULT ''::character varying NOT NULL,
+    sys_no integer DEFAULT 0 NOT NULL,
+    bill_no character varying(15) DEFAULT ''::character varying,
+    seq smallint DEFAULT 0 NOT NULL,
+    tax_type character varying(2) DEFAULT ''::character varying,
+    tran_time timestamp with time zone,
+    io character varying(1) DEFAULT ''::character varying,
+    product_id character varying(13) DEFAULT ''::character varying,
+    qty_begin double precision DEFAULT 0,
+    unit_begin character varying(3) DEFAULT ''::character varying,
+    qty double precision DEFAULT 0,
+    unit character varying(4) DEFAULT ''::character varying,
+    amount double precision DEFAULT 0,
+    price double precision DEFAULT 0,
+    ref_no character varying(20) DEFAULT ''::character varying,
+    void smallint DEFAULT 0,
+    shift character varying(9) DEFAULT ''::character varying,
+    inprice double precision DEFAULT 0
+);
+
+
+ALTER TABLE public.stock_tran OWNER TO sa;
+
+--
+-- Name: tank_accuracy; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE tank_accuracy (
+    shift character varying(9) DEFAULT ''::character varying NOT NULL,
+    tankno character varying(2) NOT NULL,
+    code character(1) DEFAULT ''::bpchar NOT NULL,
+    value double precision DEFAULT 0
+);
+
+
+ALTER TABLE public.tank_accuracy OWNER TO sa;
+
+--
+-- Name: tank_data; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE tank_data (
+    tankno character varying(2) NOT NULL,
+    productno character varying(13) DEFAULT ''::character varying,
+    birthday timestamp with time zone,
+    volume double precision DEFAULT 0,
+    seftpercent double precision DEFAULT 0,
+    alertvolume double precision DEFAULT 0,
+    tansave double precision DEFAULT 0,
+    sensormaker character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.tank_data OWNER TO sa;
+
+--
+-- Name: tank_group; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE tank_group (
+    groupno character varying(2) DEFAULT ''::character varying NOT NULL,
+    product_id character varying(13) DEFAULT ''::character varying NOT NULL,
+    tank01 character varying(1) DEFAULT 0,
+    tank02 character varying(1) DEFAULT 0,
+    tank03 character varying(1) DEFAULT 0,
+    tank04 character varying(1) DEFAULT 0,
+    tank05 character varying(1) DEFAULT 0,
+    tank06 character varying(1) DEFAULT 0,
+    tank07 character varying(1) DEFAULT 0,
+    tank08 character varying(1) DEFAULT 0,
+    tank09 character varying(1) DEFAULT 0,
+    tank10 character varying(1) DEFAULT 0,
+    memo1 character varying(20) DEFAULT ''::character varying,
+    memo2 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.tank_group OWNER TO sa;
+
+--
+-- Name: tank_history; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE tank_history (
+    "time" timestamp with time zone NOT NULL,
+    ftpstate character(2) DEFAULT '0'::bpchar NOT NULL,
+    tank1 character(10) DEFAULT '0'::bpchar NOT NULL,
+    water1 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank1_sale1 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank1_sale2 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank2 character(10) DEFAULT '0'::bpchar NOT NULL,
+    water2 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank2_sale1 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank2_sale2 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank3 character(10) DEFAULT '0'::bpchar NOT NULL,
+    water3 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank3_sale1 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank3_sale2 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank4 character(10) DEFAULT '0'::bpchar NOT NULL,
+    water4 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank4_sale1 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank4_sale2 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank5 character(10) DEFAULT '0'::bpchar NOT NULL,
+    water5 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank5_sale1 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank5_sale2 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank6 character(10) DEFAULT '0'::bpchar NOT NULL,
+    water6 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank6_sale1 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank6_sale2 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank7 character(10) DEFAULT '0'::bpchar NOT NULL,
+    water7 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank7_sale1 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank7_sale2 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank8 character(10) DEFAULT '0'::bpchar NOT NULL,
+    water8 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank8_sale1 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank8_sale2 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank9 character(10) DEFAULT '0'::bpchar NOT NULL,
+    water9 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank9_sale1 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank9_sale2 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank10 character(10) DEFAULT '0'::bpchar NOT NULL,
+    water10 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank10_sale1 character(10) DEFAULT '0'::bpchar NOT NULL,
+    tank10_sale2 character(10) DEFAULT '0'::bpchar NOT NULL
+);
+
+
+ALTER TABLE public.tank_history OWNER TO sa;
+
+--
+-- Name: tank_test; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE tank_test (
+    shift character varying(9) NOT NULL,
+    island character(2) NOT NULL,
+    gun_no character(2) NOT NULL,
+    serno character varying(1) NOT NULL,
+    product_id character varying(13) DEFAULT ''::character varying,
+    test_qty double precision DEFAULT 0,
+    acc1 character varying(5) DEFAULT ''::character varying,
+    acc2 character varying(5) DEFAULT ''::character varying,
+    acc3 character varying(5) DEFAULT ''::character varying,
+    acc4 character varying(5) DEFAULT ''::character varying,
+    acc5 character varying(5) DEFAULT ''::character varying,
+    accuracy double precision DEFAULT 0,
+    person character varying(10) DEFAULT ''::character varying,
+    check_sure character varying(1) DEFAULT '0'::character varying
+);
+
+
+ALTER TABLE public.tank_test OWNER TO sa;
+
+--
+-- Name: temp_check; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE temp_check (
+    tran_month character varying(5) NOT NULL,
+    tank_no character varying(2) NOT NULL,
+    product_id character varying(13) NOT NULL,
+    car_temp double precision DEFAULT 0,
+    tank_temp double precision DEFAULT 0,
+    tot_tran double precision DEFAULT 0,
+    temp_check_value integer DEFAULT 0
+);
+
+
+ALTER TABLE public.temp_check OWNER TO sa;
+
+--
+-- Name: ticket_barcode; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE ticket_barcode (
+    barcode character varying(16) DEFAULT ''::character varying NOT NULL,
+    shift character varying(9) DEFAULT ''::character varying NOT NULL,
+    an_shift character varying(9) DEFAULT ''::character varying,
+    ref character varying(2) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.ticket_barcode OWNER TO sa;
+
+--
+-- Name: tran; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE tran (
+    island character(2) DEFAULT '00'::bpchar NOT NULL,
+    gun_no character(2) DEFAULT '00'::bpchar NOT NULL,
+    tran_time timestamp with time zone NOT NULL,
+    tax_type character varying(3) DEFAULT ''::character varying,
+    tran_amt double precision DEFAULT 0,
+    real_amt double precision DEFAULT 0,
+    inv_amt double precision DEFAULT 0,
+    tax double precision DEFAULT 0,
+    discount double precision DEFAULT 0,
+    person_id character varying(10) DEFAULT ''::character varying,
+    uid character varying(8) DEFAULT ''::character varying,
+    invoice_tp character varying(1) DEFAULT ''::character varying,
+    invoice character varying(10) DEFAULT ''::character varying,
+    invoice_cnt smallint DEFAULT 0,
+    ticket_amt double precision DEFAULT 0,
+    payment character varying(3) DEFAULT ''::character varying,
+    tran_tp character varying(3) DEFAULT ''::character varying,
+    car_no character varying(10) DEFAULT ''::character varying,
+    vip_no character varying(20) DEFAULT ''::character varying,
+    shift character varying(9) DEFAULT ''::character varying,
+    ref_no1 character varying(20) DEFAULT ''::character varying,
+    ref_no2 character varying(20) DEFAULT ''::character varying,
+    ref_no3 character varying(20) DEFAULT ''::character varying,
+    ref_no4 character varying(20) DEFAULT ''::character varying,
+    ser_no character varying(4) DEFAULT ''::character varying,
+    void smallint DEFAULT 0,
+    prt_invoice smallint DEFAULT 0,
+    an_mark character varying(6) DEFAULT ''::character varying,
+    an_ref1 character varying(20) DEFAULT ''::character varying,
+    an_ref2 character varying(20) DEFAULT ''::character varying,
+    tran_mode character varying(1) DEFAULT '1'::character varying,
+    ref_no5 character varying(20) DEFAULT ''::character varying,
+    addpoints double precision DEFAULT 0,
+    exgpoints double precision DEFAULT 0,
+    ref_no6 character varying(20) DEFAULT ''::character varying,
+    ref_no7 character varying(20) DEFAULT ''::character varying,
+    ref_no8 character varying(20) DEFAULT ''::character varying,
+    vol_num double precision DEFAULT 0,
+    amt_num double precision DEFAULT 0,
+    print_mark smallint DEFAULT 0,
+    carrier_id1 character varying(20) DEFAULT ''::character varying,
+    carrier_id2 character varying(10) DEFAULT ''::character varying,
+    random_num character varying(20) DEFAULT ''::character varying,
+    cancel_reason character varying(2) DEFAULT ''::character varying,
+    ref_no9 character varying(20) DEFAULT ''::character varying,
+    ref_no10 character varying(20) DEFAULT ''::character varying,
+    sha_card_no character varying(50) DEFAULT ''::character varying,
+    reverse_fg character varying(20) DEFAULT ''::character varying,
+    ref_no11 character varying(10) DEFAULT ''::character varying,
+    ref_no12 character varying(10) DEFAULT ''::character varying,
+    ref_no13 character varying(20) DEFAULT ''::character varying,
+    ref_no14 character varying(20) DEFAULT ''::character varying,
+    ref_no15 character varying(20) DEFAULT ''::character varying,
+    ref_no16 character varying(20) DEFAULT ''::character varying,
+    ref_no17 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.tran OWNER TO sa;
+
+--
+-- Name: tran_back; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE tran_back (
+    island character(2) DEFAULT '00'::bpchar NOT NULL,
+    gun_no character(2) DEFAULT '00'::bpchar NOT NULL,
+    tran_time timestamp with time zone NOT NULL,
+    tax_type character varying(3) DEFAULT ''::character varying,
+    tran_amt double precision DEFAULT 0,
+    real_amt double precision DEFAULT 0,
+    inv_amt double precision DEFAULT 0,
+    tax double precision DEFAULT 0,
+    discount double precision DEFAULT 0,
+    person_id character varying(10) DEFAULT ''::character varying,
+    uid character varying(8) DEFAULT ''::character varying,
+    invoice_tp character varying(1) DEFAULT ''::character varying,
+    invoice character varying(10) DEFAULT ''::character varying,
+    invoice_cnt smallint DEFAULT 0,
+    ticket_amt double precision DEFAULT 0,
+    payment character varying(3) DEFAULT ''::character varying,
+    tran_tp character varying(3) DEFAULT ''::character varying,
+    car_no character varying(10) DEFAULT ''::character varying,
+    vip_no character varying(20) DEFAULT ''::character varying,
+    shift character varying(9) DEFAULT ''::character varying,
+    ref_no1 character varying(20) DEFAULT ''::character varying,
+    ref_no2 character varying(20) DEFAULT ''::character varying,
+    ref_no3 character varying(20) DEFAULT ''::character varying,
+    ref_no4 character varying(20) DEFAULT ''::character varying,
+    ser_no character varying(4) DEFAULT ''::character varying,
+    void smallint DEFAULT 0,
+    prt_invoice smallint DEFAULT 0,
+    an_mark character varying(6) DEFAULT ''::character varying,
+    an_ref1 character varying(20) DEFAULT ''::character varying,
+    an_ref2 character varying(20) DEFAULT ''::character varying,
+    tran_mode character varying(1) DEFAULT '1'::character varying,
+    ref_no5 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.tran_back OWNER TO sa;
+
+--
+-- Name: tran_check; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE tran_check (
+    tran_month character varying(5) NOT NULL,
+    oilsource_id character varying(5) NOT NULL,
+    port_no character varying(2) NOT NULL,
+    product_id character varying(13) NOT NULL,
+    accuracy double precision DEFAULT 0,
+    tot_tran double precision DEFAULT 0,
+    tran_check_value integer DEFAULT 0
+);
+
+
+ALTER TABLE public.tran_check OWNER TO sa;
+
+--
+-- Name: tran_detl; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE tran_detl (
+    island character(2) DEFAULT '00'::bpchar NOT NULL,
+    gun_no character(2) DEFAULT '00'::bpchar NOT NULL,
+    tran_time timestamp with time zone NOT NULL,
+    seq smallint DEFAULT 0 NOT NULL,
+    tax_type character varying(2) DEFAULT ''::character varying,
+    product_id character varying(13) DEFAULT ''::character varying,
+    "class" character varying(3) DEFAULT ''::character varying,
+    price double precision DEFAULT 0,
+    amt double precision DEFAULT 0,
+    qty double precision DEFAULT 0,
+    unit character varying(4) DEFAULT ''::character varying,
+    ref_no character varying(20) DEFAULT ''::character varying,
+    shift character varying(9) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.tran_detl OWNER TO sa;
+
+--
+-- Name: tran_detl_back; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE tran_detl_back (
+    island character(2) DEFAULT '00'::bpchar NOT NULL,
+    gun_no character(2) DEFAULT '00'::bpchar NOT NULL,
+    tran_time timestamp with time zone NOT NULL,
+    seq smallint DEFAULT 0 NOT NULL,
+    tax_type character varying(2) DEFAULT ''::character varying,
+    product_id character varying(13) DEFAULT ''::character varying,
+    "class" character varying(3) DEFAULT ''::character varying,
+    price double precision DEFAULT 0,
+    amt double precision DEFAULT 0,
+    qty double precision DEFAULT 0,
+    unit character varying(4) DEFAULT ''::character varying,
+    ref_no character varying(20) DEFAULT ''::character varying,
+    shift character varying(9) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.tran_detl_back OWNER TO sa;
+
+--
+-- Name: tran_detl_tmp; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE tran_detl_tmp (
+    island character(2) DEFAULT '00'::bpchar NOT NULL,
+    gun_no character(2) DEFAULT '00'::bpchar NOT NULL,
+    tran_time timestamp with time zone NOT NULL,
+    seq smallint DEFAULT 0 NOT NULL,
+    tax_type character varying(2) DEFAULT ''::character varying,
+    product_id character varying(13) DEFAULT ''::character varying,
+    "class" character varying(3) DEFAULT ''::character varying,
+    price double precision DEFAULT 0,
+    amt double precision DEFAULT 0,
+    qty double precision DEFAULT 0,
+    unit character varying(4) DEFAULT ''::character varying,
+    ref_no character varying(20) DEFAULT ''::character varying,
+    shift character varying(9) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.tran_detl_tmp OWNER TO sa;
+
+--
+-- Name: tran_tmp; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE tran_tmp (
+    island character(2) DEFAULT '00'::bpchar NOT NULL,
+    gun_no character(2) DEFAULT '00'::bpchar NOT NULL,
+    tran_time timestamp with time zone NOT NULL,
+    tax_type character varying(3) DEFAULT ''::character varying,
+    tran_amt double precision DEFAULT 0,
+    real_amt double precision DEFAULT 0,
+    inv_amt double precision DEFAULT 0,
+    tax double precision DEFAULT 0,
+    discount double precision DEFAULT 0,
+    person_id character varying(10) DEFAULT ''::character varying,
+    uid character varying(8) DEFAULT ''::character varying,
+    invoice_tp character varying(1) DEFAULT ''::character varying,
+    invoice character varying(10) DEFAULT ''::character varying,
+    invoice_cnt smallint DEFAULT 0,
+    ticket_amt double precision DEFAULT 0,
+    payment character varying(3) DEFAULT ''::character varying,
+    tran_tp character varying(3) DEFAULT ''::character varying,
+    car_no character varying(10) DEFAULT ''::character varying,
+    vip_no character varying(20) DEFAULT ''::character varying,
+    shift character varying(9) DEFAULT ''::character varying,
+    ref_no1 character varying(20) DEFAULT ''::character varying,
+    ref_no2 character varying(20) DEFAULT ''::character varying,
+    ref_no3 character varying(20) DEFAULT ''::character varying,
+    ref_no4 character varying(20) DEFAULT ''::character varying,
+    ser_no character varying(4) DEFAULT ''::character varying,
+    void smallint DEFAULT 0,
+    prt_invoice smallint DEFAULT 0,
+    an_mark character varying(6) DEFAULT ''::character varying,
+    an_ref1 character varying(20) DEFAULT ''::character varying,
+    an_ref2 character varying(20) DEFAULT ''::character varying,
+    tran_mode character varying(1) DEFAULT '1'::character varying,
+    ref_no5 character varying(20) DEFAULT ''::character varying,
+    addpoints double precision DEFAULT 0,
+    exgpoints double precision DEFAULT 0,
+    ref_no6 character varying(20) DEFAULT ''::character varying,
+    ref_no7 character varying(20) DEFAULT ''::character varying,
+    ref_no8 character varying(20) DEFAULT ''::character varying,
+    vol_num double precision DEFAULT 0,
+    amt_num double precision DEFAULT 0,
+    print_mark smallint DEFAULT 0,
+    carrier_id1 character varying(20) DEFAULT ''::character varying,
+    carrier_id2 character varying(10) DEFAULT ''::character varying,
+    random_num character varying(20) DEFAULT ''::character varying,
+    cancel_reason character varying(2) DEFAULT ''::character varying,
+    ref_no9 character varying(20) DEFAULT ''::character varying,
+    ref_no10 character varying(20) DEFAULT ''::character varying,
+    sha_card_no character varying(50) DEFAULT ''::character varying,
+    reverse_fg character varying(20) DEFAULT ''::character varying,
+    ref_no11 character varying(10) DEFAULT ''::character varying,
+    ref_no12 character varying(10) DEFAULT ''::character varying,
+    ref_no13 character varying(20) DEFAULT ''::character varying,
+    ref_no14 character varying(20) DEFAULT ''::character varying,
+    ref_no15 character varying(20) DEFAULT ''::character varying,
+    ref_no16 character varying(20) DEFAULT ''::character varying,
+    ref_no17 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.tran_tmp OWNER TO sa;
+
+--
+-- Name: tran_detl_tmp_view; Type: VIEW; Schema: public; Owner: sa
+--
+
+CREATE VIEW tran_detl_tmp_view AS
+    SELECT bb.tran_time, bb.island, bb.gun_no, dd.tank, dd.machine, bb.seq, bb.product_id, cc.name, bb.price, bb.qty, bb.amt, bb."class", aa.payment, aa.tran_tp, bb.shift, aa.void FROM tran_tmp aa, tran_detl_tmp bb, product cc, set_island dd WHERE ((((((aa.island = bb.island) AND (aa.gun_no = bb.gun_no)) AND (aa.tran_time = bb.tran_time)) AND ((bb.product_id)::text = (cc.product_id)::text)) AND (bb.island = dd.island)) AND (bb.gun_no = dd.gun_no)) ORDER BY aa.tran_time, aa.island, aa.gun_no;
+
+
+ALTER TABLE public.tran_detl_tmp_view OWNER TO sa;
+
+--
+-- Name: tran_detl_view; Type: VIEW; Schema: public; Owner: sa
+--
+
+CREATE VIEW tran_detl_view AS
+    SELECT bb.tran_time, bb.island, bb.gun_no, dd.tank, dd.machine, bb.seq, bb.product_id, cc.name, bb.price, bb.qty, bb.amt, bb."class", aa.payment, aa.tran_tp, bb.shift, aa.void FROM tran aa, tran_detl bb, product cc, set_island dd WHERE ((((((aa.island = bb.island) AND (aa.gun_no = bb.gun_no)) AND (aa.tran_time = bb.tran_time)) AND ((bb.product_id)::text = (cc.product_id)::text)) AND (bb.island = dd.island)) AND (bb.gun_no = dd.gun_no)) ORDER BY aa.tran_time, aa.island, aa.gun_no;
+
+
+ALTER TABLE public.tran_detl_view OWNER TO sa;
+
+--
+-- Name: tran_multideal; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE tran_multideal (
+    island character(2) DEFAULT '00'::bpchar NOT NULL,
+    gun_no character(2) DEFAULT '00'::bpchar NOT NULL,
+    tran_time timestamp with time zone NOT NULL,
+    seq smallint DEFAULT 0 NOT NULL,
+    product_id character varying(13) DEFAULT ''::character varying,
+    amt double precision DEFAULT 0,
+    barcode1 character varying(30) DEFAULT ''::character varying,
+    barcode2 character varying(30) DEFAULT ''::character varying,
+    barcode3 character varying(30) DEFAULT ''::character varying,
+    barcode4 character varying(30) DEFAULT ''::character varying,
+    barcode5 character varying(30) DEFAULT ''::character varying,
+    void smallint DEFAULT 0,
+    shift character varying(9) DEFAULT ''::character varying,
+    name character varying(48) DEFAULT ''::character varying,
+    fee_fg character(1) DEFAULT ''::bpchar,
+    fee_i double precision DEFAULT 0,
+    fee_e double precision DEFAULT 0,
+    tran_fg character(1) DEFAULT ''::bpchar,
+    print_no character(1) DEFAULT ''::bpchar,
+    corp_id character varying(10) DEFAULT ''::character varying,
+    corp_tel character varying(20) DEFAULT ''::character varying,
+    ref_no1 character varying(10) DEFAULT ''::character varying,
+    ref_no2 character varying(10) DEFAULT ''::character varying,
+    batch_no character varying(6) DEFAULT ''::character varying,
+    write_fg character(1) DEFAULT ''::bpchar
+);
+
+
+ALTER TABLE public.tran_multideal OWNER TO sa;
+
+--
+-- Name: tran_multideal_api; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE tran_multideal_api (
+    island character(2) DEFAULT '00'::bpchar NOT NULL,
+    gun_no character(2) DEFAULT '00'::bpchar NOT NULL,
+    tran_time timestamp with time zone NOT NULL,
+    seq smallint DEFAULT 0 NOT NULL,
+    product_id character varying(13) DEFAULT ''::character varying,
+    amt double precision DEFAULT 0,
+    barcode1 character varying(30) DEFAULT ''::character varying,
+    barcode2 character varying(30) DEFAULT ''::character varying,
+    barcode3 character varying(30) DEFAULT ''::character varying,
+    barcode4 character varying(30) DEFAULT ''::character varying,
+    barcode5 character varying(30) DEFAULT ''::character varying,
+    void smallint DEFAULT 0,
+    shift character varying(9) DEFAULT ''::character varying,
+    name character varying(48) DEFAULT ''::character varying,
+    fee_fg character(1) DEFAULT ''::bpchar,
+    fee_i double precision DEFAULT 0,
+    fee_e double precision DEFAULT 0,
+    tran_fg character(1) DEFAULT ''::bpchar,
+    print_no character(1) DEFAULT ''::bpchar,
+    corp_id character varying(10) DEFAULT ''::character varying,
+    corp_tel character varying(20) DEFAULT ''::character varying,
+    ref_no1 character varying(10) DEFAULT ''::character varying,
+    ref_no2 character varying(10) DEFAULT ''::character varying,
+    batch_no character varying(6) DEFAULT ''::character varying,
+    write_fg character(1) DEFAULT ''::bpchar
+);
+
+
+ALTER TABLE public.tran_multideal_api OWNER TO sa;
+
+--
+-- Name: tran_multideal_back; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE tran_multideal_back (
+    island character(2) DEFAULT '00'::bpchar NOT NULL,
+    gun_no character(2) DEFAULT '00'::bpchar NOT NULL,
+    tran_time timestamp with time zone NOT NULL,
+    seq smallint DEFAULT 0 NOT NULL,
+    product_id character varying(13) DEFAULT ''::character varying,
+    amt double precision DEFAULT 0,
+    barcode1 character varying(30) DEFAULT ''::character varying,
+    barcode2 character varying(30) DEFAULT ''::character varying,
+    barcode3 character varying(30) DEFAULT ''::character varying,
+    barcode4 character varying(30) DEFAULT ''::character varying,
+    barcode5 character varying(30) DEFAULT ''::character varying,
+    void smallint DEFAULT 0,
+    shift character varying(9) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.tran_multideal_back OWNER TO sa;
+
+--
+-- Name: tran_multideal_tmp; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE tran_multideal_tmp (
+    island character(2) DEFAULT '00'::bpchar NOT NULL,
+    gun_no character(2) DEFAULT '00'::bpchar NOT NULL,
+    tran_time timestamp with time zone NOT NULL,
+    seq smallint DEFAULT 0 NOT NULL,
+    product_id character varying(13) DEFAULT ''::character varying,
+    amt double precision DEFAULT 0,
+    barcode1 character varying(30) DEFAULT ''::character varying,
+    barcode2 character varying(30) DEFAULT ''::character varying,
+    barcode3 character varying(30) DEFAULT ''::character varying,
+    barcode4 character varying(30) DEFAULT ''::character varying,
+    barcode5 character varying(30) DEFAULT ''::character varying,
+    void smallint DEFAULT 0,
+    shift character varying(9) DEFAULT ''::character varying,
+    name character varying(48) DEFAULT ''::character varying,
+    fee_fg character(1) DEFAULT ''::bpchar,
+    fee_i double precision DEFAULT 0,
+    fee_e double precision DEFAULT 0,
+    tran_fg character(1) DEFAULT ''::bpchar,
+    print_no character(1) DEFAULT ''::bpchar,
+    corp_id character varying(10) DEFAULT ''::character varying,
+    corp_tel character varying(20) DEFAULT ''::character varying,
+    ref_no1 character varying(10) DEFAULT ''::character varying,
+    ref_no2 character varying(10) DEFAULT ''::character varying,
+    batch_no character varying(6) DEFAULT ''::character varying,
+    write_fg character(1) DEFAULT ''::bpchar
+);
+
+
+ALTER TABLE public.tran_multideal_tmp OWNER TO sa;
+
+--
+-- Name: vip_form; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE vip_form (
+    form_no character(17) NOT NULL,
+    f_time timestamp without time zone,
+    form_type character(1) DEFAULT ''::bpchar,
+    uitem1 character varying(20) DEFAULT ''::character varying,
+    uitem2 character varying(20) DEFAULT ''::character varying,
+    uitem3 character varying(20) DEFAULT ''::character varying,
+    uitem4 character varying(20) DEFAULT ''::character varying,
+    uitem5 character varying(20) DEFAULT ''::character varying,
+    uitem6 character varying(20) DEFAULT ''::character varying,
+    uitem7 character varying(20) DEFAULT ''::character varying,
+    uitem8 character varying(20) DEFAULT ''::character varying,
+    uitem9 character varying(20) DEFAULT ''::character varying,
+    uitem10 character varying(20) DEFAULT ''::character varying,
+    uitem11 character varying(20) DEFAULT ''::character varying,
+    uitem12 character varying(20) DEFAULT ''::character varying,
+    uitem13 character varying(20) DEFAULT ''::character varying,
+    uitem14 character varying(20) DEFAULT ''::character varying,
+    uitem15 character varying(20) DEFAULT ''::character varying,
+    uitem16 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.vip_form OWNER TO sa;
+
+--
+-- Name: vip_paym_pnt_disc; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE vip_paym_pnt_disc (
+    payment character varying(3) NOT NULL,
+    point double precision DEFAULT 0,
+    discount double precision DEFAULT 0,
+    eff_date timestamp without time zone NOT NULL,
+    end_date timestamp without time zone
+);
+
+
+ALTER TABLE public.vip_paym_pnt_disc OWNER TO sa;
+
+--
+-- Name: vip_prod_pnt_disc; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE vip_prod_pnt_disc (
+    product_id character varying(13) NOT NULL,
+    prod_class character varying(3) NOT NULL,
+    vip_class character varying(3) NOT NULL,
+    unit character(1) DEFAULT 'M'::bpchar NOT NULL,
+    p_level double precision DEFAULT 0,
+    p_rela double precision DEFAULT 0,
+    p_point double precision DEFAULT 0,
+    d_level double precision DEFAULT 0,
+    d_disc double precision DEFAULT 0,
+    eff_date timestamp without time zone NOT NULL,
+    end_date timestamp without time zone
+);
+
+
+ALTER TABLE public.vip_prod_pnt_disc OWNER TO sa;
+
+--
+-- Name: vip_set_disc; Type: TABLE; Schema: public; Owner: sa; Tablespace: 
+--
+
+CREATE TABLE vip_set_disc (
+    ser_no integer NOT NULL,
+    "class" character varying(3) DEFAULT ''::character varying,
+    pid character varying(13) DEFAULT ''::character varying,
+    disc_level double precision DEFAULT 0,
+    disc_rela double precision DEFAULT 0,
+    disc_amt double precision DEFAULT 0,
+    disc_rate double precision DEFAULT 0,
+    memo1 character varying(20) DEFAULT ''::character varying,
+    memo2 character varying(20) DEFAULT ''::character varying
+);
+
+
+ALTER TABLE public.vip_set_disc OWNER TO sa;
